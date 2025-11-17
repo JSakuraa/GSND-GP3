@@ -17,4 +17,8 @@ public class SceneController : MonoBehaviour
     {
         SceneManager.LoadScene("GameOverScreen");
     }
+    public void debugprint(string s)
+    {
+        print(s);
+    }
 }
