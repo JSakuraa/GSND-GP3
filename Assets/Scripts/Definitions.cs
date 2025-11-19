@@ -150,6 +150,7 @@ namespace BattleFefinitions
     {
         public Melody melody;
         public MelodyEffect effect;
+        public string name;
         public SpecialMelody()
         {
 
@@ -167,7 +168,8 @@ namespace BattleFefinitions
     public class Execute : SpecialMelody
     {
         public Execute():base()
-        {
+        {   
+            name="Execute";
             melody  = new Melody(0, 1, 2, 3);
             effect  = new TouchOfDeath();
             
