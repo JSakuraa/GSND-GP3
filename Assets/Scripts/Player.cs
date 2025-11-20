@@ -33,13 +33,16 @@ public class Player
     {
         for (int j = 0; j < health_change.Length; j++)
         {
-            if (health + health_change[j] <= max_health)
+            if (health + health_change[j] >= max_health)
             {
-                health += health_change[j];
+
             }
-            else
+            else if (health + health_change[j]<=0)
             {
-                health = max_health;
+                health = 0;
+            }
+            else {
+                health += health_change[j];
             }
             //health_change[j] = 0;
         }

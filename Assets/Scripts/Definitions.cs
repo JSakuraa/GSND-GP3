@@ -131,9 +131,9 @@ namespace BattleFefinitions
     public class MelodyEffect
     {
         public string name;
-        public void apply(Player self, Player enemy, double potency)
+        public virtual void apply(Player self, Player enemy, double potency)
         {
-            return;
+            Debug.Log($"applying effect {name} on self {self.name} and enemy {enemy.name} with potency {potency}");
         }
         public override string ToString()
         {
@@ -146,11 +146,13 @@ namespace BattleFefinitions
         {
             name = "Touch of Death";
         }
-        new public void apply(Player self, Player enemy, double potency)
+        public override void apply(Player self, Player enemy, double potency)
         {
-            if (potency >= 4)
+            base.apply(self, enemy, potency);
+            if ((potency >= 0) && (self.health <= 100))
             {
                 enemy.health = 0;
+                Debug.Log($"Touch of death kills {enemy.name}");
             }
 
         }
@@ -207,6 +209,7 @@ namespace BattleFefinitions
                 if (sm.melody.extEquals(m))
                 {
                     target = sm;
+                    Debug.Log($"found combo: {sm}");
                 
                 }
             }
@@ -218,7 +221,7 @@ namespace BattleFefinitions
         public Execute():base()
         {   
             name="Execute";
-            melody  = new Melody(0, 1, 2, 3);
+            melody  = new Melody(3, 3, 3, 3);
             effect  = new TouchOfDeath();
             
         }

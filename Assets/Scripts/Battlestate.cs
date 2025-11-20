@@ -107,6 +107,7 @@ public class Battlestate : MonoBehaviour
         double[] outputs = Actionresolution.resolve_actions(a1, a2);
         Debug.Log($"action outcomes: {Actionresolution.GenerateArrayDefinitionString1D(outputs)}");
         computeHealthChange(a1, a2, outputs);
+        applyMelodyEffect(a1, a2, outputs);
         a1.player.applyHealthChange();
         a2.player.applyHealthChange();
         Debug.Log(a1.player.info());
