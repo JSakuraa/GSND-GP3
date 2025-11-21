@@ -19,8 +19,8 @@ public class PlayerWraper : MonoBehaviour
 }
 public class Player
 {
-    public double max_health = 100;
-    public double health = 100;
+    public double max_health = 8;
+    public double health = 8;
     public PlayerEffect[] effects;
     public Player enemy;
     public string type;

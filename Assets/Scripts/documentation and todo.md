@@ -53,5 +53,3 @@ C=Damage, D=Heal, E=LifeSteal, F=Damage, G=Heal, A=LifeSteal, B=Heal
 - Set HP and other combat scalars to be accurate
 - Add a game end state (HP <= 0)
 - Add in proper character classes and combos 
-
-changed note mappings, scalar for damage dealt, and added sparse documenation and todo list 
