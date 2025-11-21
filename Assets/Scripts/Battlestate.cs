@@ -25,6 +25,8 @@ public class Battlestate : MonoBehaviour
         Debug.Log("Start battle state");
         player1 = new Killer("Alice");
         player2 = new Killer("Alex");
+        player1.health = player1_health;
+        player2.health = player2_health;
         player1.enemy = player2;
         player2.enemy = player1;
 
@@ -53,14 +55,15 @@ public class Battlestate : MonoBehaviour
             effect.effect.apply(winner.player, winner.player.enemy, potency);
         }
     }
-    public static double getPotency(double[] outputs){
+    public static double getPotency(double[] outputs)
+    {
         double potency = 0;
         for (int j = 0; j < outputs.Length; j++)
-            {
-                potency += outputs[j];
-            }
-        return potency;
+        {
+            potency += outputs[j];
         }
+        return potency;
+    }
 
     public static void computeHealthChange(Action a1, Action a2, double[] outputs)
     {
