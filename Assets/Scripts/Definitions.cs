@@ -131,10 +131,97 @@ namespace MusicDefinitions
 
 namespace BattleDefinitions
 {
-    public class MelodyEffect
+
+    public class Effect
     {
         public string name;
+
+        public Player subj;
+        public Player obj;
+
+        public double power;
+
+        public virtual void apply()
+        {
+            Debug.Log($"applying effect {name} on self {subj.name} and enemy {obj.name} with potency {power}");
+        }
         public virtual void apply(Player self, Player enemy, double potency)
+        {
+            Debug.Log($"applying effect {name} on self {self.name} and enemy {enemy.name} with potency {potency}");
+        }
+        public override string ToString()
+        {
+            return $"Effect: {name}";
+        }
+    }
+    public class HealEffect : Effect
+    {
+        public HealEffect()
+        {
+            name = "base Heal";
+            power = 10;
+        }
+        public HealEffect(Player self, Player enemy, double p)
+        {
+            name = "base Heal";
+            power = p;
+            subj = self;
+            obj = enemy;
+        }
+        public override void apply()
+        {
+            base.apply();
+            subj.getHealed(power);
+        }
+
+    }
+    public class DamageEffect : Effect
+    {
+        public DamageEffect()
+        {
+            name = "base Damage";
+            power = 10;
+        }
+        public DamageEffect(Player self, Player enemy, double p)
+        {
+            name = "base Damge";
+            power = p;
+            subj = self;
+            obj = enemy;
+        }
+        public override void apply()
+        {
+            base.apply();
+            obj.getDamaged(power);
+        }
+
+    }
+    public class LifeStealEffect : Effect
+    {
+        public LifeStealEffect()
+        {
+            name = "base Life Steal";
+            power = 10;
+        }
+        public LifeStealEffect(Player self, Player enemy, double p)
+        {
+            name = "base Life Steal";
+            power = p;
+            subj = self;
+            obj = enemy;
+        }
+        public override void apply()
+        {
+            base.apply();
+            subj.getHealed(power);
+            obj.getDamaged(power);
+        }
+
+    }
+
+    public class MelodyEffect : Effect
+    {
+        public override void apply(Player self, Player enemy, double potency)
         {
             Debug.Log($"applying effect {name} on self {self.name} and enemy {enemy.name} with potency {potency}");
         }
@@ -338,7 +425,9 @@ namespace BattleDefinitions
                 if (sm.matchMelody(m))
                 {
                     target = sm;
+
                     Debug.Log($"found combo: {sm}");
+                    return target; //return only first
 
                 }
 

@@ -1,7 +1,7 @@
 using UnityEngine;
 using MusicDefinitions;
 using BattleDefinitions;
-
+using System.Collections.Generic;
 
 public class PlayerWraper : MonoBehaviour
 {
@@ -21,7 +21,7 @@ public class Player
 {
     public double max_health = 100;
     public double health = 100;
-    public PlayerEffect[] effects;
+    public List<PlayerEffect> effects;
     public Player enemy;
     public string type;
     public string name="None";
@@ -63,20 +63,29 @@ public class Player
         }
     }
 
+    public void getHealed(double power)
+    {
+        changeHealth(power * heal_mult);
+    }
+
+    public void getDamaged(double power)
+    {
+        changeHealth(-power * damage_mult);
+    }
     public void changeHealth(double hpchange)
     {
         if (health + hpchange >= max_health)
-            {
-                health = max_health;
-            }
-            else if (health + hpchange <= 0)
-            {
-                health = 0;
-            }
-            else
-            {
-                health += hpchange;
-            }
+        {
+            health = max_health;
+        }
+        else if (health + hpchange <= 0)
+        {
+            health = 0;
+        }
+        else
+        {
+            health += hpchange;
+        }
     }
 
     void apply_mult()
