@@ -21,7 +21,7 @@ public class Player
 {
     public double max_health = 100;
     public double health = 100;
-    public List<PlayerEffect> effects;
+    public List<PlayerEffect> effects =new  List<PlayerEffect>();
     public Player enemy;
     public string type;
     public string name="None";
@@ -41,6 +41,18 @@ public class Player
     public double heal_mult_mod=1;
 
     public double[] health_change = { 0, 0, 0, 0 };
+
+    public void applyPlayerEffects()
+    {
+        foreach (PlayerEffect e in effects)
+        {
+            Debug.Log($"Applying passive effects on {name}");
+            e.apply();
+        }
+        
+    }
+
+    
 
     public void applyHealthChange()
     {
@@ -123,6 +135,10 @@ public class Monster
     {
         return SpecialMelody.findFromMelody(combos, m);
     }
+    public override string ToString()
+        {
+            return $"Monster: {name}";
+        }
 }
 
 public class Unseen : Monster
@@ -130,12 +146,9 @@ public class Unseen : Monster
     public Unseen()
     {
         name = "the Unseen";
-        combos = new SpecialMelody[] { new Execute(), new MinorHeal(), new MinorAmplify() };
+        combos = new SpecialMelody[] { new Execute(), new MinorHeal(), new MinorAmplify(), new Curse() };
     }
-    public override string ToString()
-        {
-            return $"Monster: {name}";
-        }
+    
 }
 
 public class Killer : Player

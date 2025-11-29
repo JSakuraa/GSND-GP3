@@ -136,6 +136,8 @@ public class Battlestate : MonoBehaviour
         applyMelodyEffect(a1, a2, outputs);
         a1.player.applyHealthChange();
         a2.player.applyHealthChange();
+        a1.player.applyPlayerEffects();
+        a2.player.applyPlayerEffects();
         last_update.p1hp_change = a1.player.health_change;
         last_update.p2hp_change = a2.player.health_change;
         Debug.Log(a1.player.info());

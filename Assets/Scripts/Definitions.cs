@@ -258,6 +258,43 @@ namespace BattleDefinitions
         }
     }
 
+    public class Poison: MelodyEffect
+    {
+        double min_potency;
+        double low_hp;
+        double damage;
+        public Poison()
+        {
+            damage = 5;
+            min_potency = 0;
+            low_hp = 100;
+            name = "Poison";
+        }
+        public Poison(double d)
+        {
+            damage = d;
+            min_potency = 0;
+            low_hp = 100;
+            name = "Poison";
+        }
+        public Poison(double mp, double lhp)
+        {
+            min_potency = mp;
+            low_hp = lhp;
+            name = "Poison";
+        }
+        public override void apply(Player self, Player enemy, double potency)
+        {
+            base.apply(self, enemy, potency);
+            if ((potency >= min_potency) && (self.health <= low_hp))
+            {
+                enemy.effects.Add(new DoT(damage * potency,enemy));
+                Debug.Log($"Poison applied damage over time on {enemy.name}");
+            }
+
+        }
+    }
+
     public class HealingSong : MelodyEffect
     {
         double min_potency;
@@ -376,7 +413,7 @@ namespace BattleDefinitions
     {
         public string name;
         Player carrier;
-        public void apply(Player self)
+        public virtual void apply()
         {
             return;
         }
@@ -391,11 +428,18 @@ namespace BattleDefinitions
         {
             name = "Damage over time";
         }
+
+        public DoT(double p, Player target)
+        {
+            potency = p;
+            carrier = target;
+            name = "Damage over time";
+        }
         Player carrier;
         double potency = 1;
-        new public void apply(Player self)
+        public override void apply()
         {
-            carrier.health -= potency;
+            carrier.changeHealth(-potency);
         }
     }
     public class SpecialMelody
@@ -473,6 +517,16 @@ namespace BattleDefinitions
             name = "Execute";
             melody = new Melody(3, 3, 3, 3);
             effect = new TouchOfDeath();
+
+        }
+    }
+    public class Curse : SpecialMelody
+    {
+        public Curse() : base()
+        {
+            name = "Curse";
+            melody = new Melody(6, 5, 2, 3);
+            effect = new Poison(10);
 
         }
     }
