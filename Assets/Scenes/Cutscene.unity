@@ -470,7 +470,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VideoSceneTransition
   videoPlayer: {fileID: 111101070}
-  nextSceneName: GameSceneV3
+  nextSceneName: Tutorial
   allowSkip: 1
 --- !u!4 &999731113
 Transform:

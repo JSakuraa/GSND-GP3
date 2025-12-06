@@ -21,12 +21,7 @@ public class VideoSceneTransition : MonoBehaviour
 
     void Update()
     {
-        // Allow skipping with Space or Escape
-        if (allowSkip && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Escape)))
-        {
-            Debug.Log("Video skipped by player");
-            LoadNextScene();
-        }
+
     }
 
     void OnVideoFinished(VideoPlayer vp)

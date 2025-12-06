@@ -22,6 +22,9 @@ public class ButtonInputReader : MonoBehaviour
     [Header("UI Manager")]
     public UIManager uiManager;
 
+    [Header("Background Music")]
+    private BackgroundMusicManager bgMusic;
+
     // Track current turn and input state
     private enum TurnPhase { FirstPlayerMelody, SecondPlayerMelody, BattleResolution }
     private TurnPhase currentPhase = TurnPhase.FirstPlayerMelody;
@@ -53,6 +56,7 @@ public class ButtonInputReader : MonoBehaviour
             uiManager.AdjustHealthBar(uiManager.player1, (int)bs.player1.health);
             uiManager.AdjustHealthBar(uiManager.player2, (int)bs.player2.health);
         }
+        bgMusic = FindObjectOfType<BackgroundMusicManager>();
 
         UpdateTurnIndicator();
         ShowMelodyButtons();
@@ -317,21 +321,31 @@ public class ButtonInputReader : MonoBehaviour
         // Always pass actions as (player1Action, player2Action) to battle logic
         bs.battle(player1Action, player2Action);
 
-        // Trigger UI animations - ALWAYS pass in (player1Action, player2Action) order
-        // UIManager will handle displaying them in the correct turn order
+        // Subscribe to animation complete event
         if (uiManager != null)
         {
+            uiManager.onBattleAnimationComplete = OnBattleAnimationComplete;
             uiManager.DisplayBattleResults(bs.last_update, player1Action, player2Action, player1GoesFirst);
+        }
+    }
+
+    // NEW: Called when UIManager finishes all animations
+    private void OnBattleAnimationComplete()
+    {
+        // Unsubscribe from event
+        if (uiManager != null)
+        {
+            uiManager.onBattleAnimationComplete = null;
         }
 
         // Check for game over
         if (bs.player1.health <= 0 || bs.player2.health <= 0)
         {
-            Invoke("HandleGameOver", 8f);
+            HandleGameOver();
         }
         else
         {
-            Invoke("StartNextTurn", 8f);
+            StartNextTurn();
         }
     }
 
@@ -378,6 +392,10 @@ public class ButtonInputReader : MonoBehaviour
 
     private void ShowMelodyButtons()
     {
+
+        if (bgMusic != null)
+            bgMusic.OnTurnPhaseStart();
+
         noteButtons.SetActive(true);
         confirmButton.SetActive(false);
         if (backspaceButton != null)

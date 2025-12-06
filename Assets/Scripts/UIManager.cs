@@ -11,6 +11,8 @@ public class UIManager : MonoBehaviour
     // Singleton pattern for easy access
     public static UIManager Instance { get; private set; }
 
+    public System.Action onBattleAnimationComplete;
+
     [Header("Player References")]
     public PlayerUI player1;
     public PlayerUI player2;
@@ -467,6 +469,11 @@ public class UIManager : MonoBehaviour
         ClearNoteIcons();
 
         Debug.Log("Battle animation sequence complete");
+
+        if (onBattleAnimationComplete != null)
+        {
+            onBattleAnimationComplete.Invoke();
+        }
     }
 
     // === ICON MANAGEMENT ===
