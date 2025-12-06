@@ -32,6 +32,9 @@ public class ButtonInputReader : MonoBehaviour
     // Track who goes first this round
     private bool player1GoesFirst = true;
 
+    // Track if melody is playing
+    private bool isPlayingMelody = false;
+
     // Store selected notes
     private List<MusicalNote> currentMelodyNotes = new List<MusicalNote>();
 
@@ -223,10 +226,9 @@ public class ButtonInputReader : MonoBehaviour
         }
     }
 
-    // Called by Playback button - plays current melody
     public void OnPlaybackButtonClicked()
     {
-        if (currentMelodyNotes.Count == 0)
+        if (currentMelodyNotes.Count == 0 || isPlayingMelody)
             return;
 
         PlayerUI currentPlayer = GetCurrentPlayer();
@@ -240,8 +242,44 @@ public class ButtonInputReader : MonoBehaviour
                 melodyNotes[i] = currentMelodyNotes[i].ToString();
             }
 
-            uiManager.PlayMelody(melodyNotes, currentPlayer);
+            // Start playback and block further clicks
+            StartCoroutine(PlayMelodyWithLock(melodyNotes, currentPlayer));
         }
+    }
+
+    // Add this new coroutine method to ButtonInputReader:
+    private System.Collections.IEnumerator PlayMelodyWithLock(string[] melody, PlayerUI playerUI)
+    {
+        isPlayingMelody = true;
+
+        // Optional: Disable the playback button visually
+        if (playbackButton != null)
+        {
+            var button = playbackButton.GetComponent<UnityEngine.UI.Button>();
+            if (button != null)
+            {
+                button.interactable = false;
+            }
+        }
+
+        // Play the melody through UIManager
+        uiManager.PlayMelody(melody, playerUI);
+
+        // Wait for melody to finish (notePlaybackDelay * number of notes)
+        float totalDuration = uiManager.notePlaybackDelay * melody.Length;
+        yield return new WaitForSeconds(totalDuration);
+
+        // Re-enable button
+        if (playbackButton != null)
+        {
+            var button = playbackButton.GetComponent<UnityEngine.UI.Button>();
+            if (button != null)
+            {
+                button.interactable = true;
+            }
+        }
+
+        isPlayingMelody = false;
     }
 
     // Called by Confirm button
